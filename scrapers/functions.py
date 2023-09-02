@@ -18,10 +18,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-def yt_links(key, value, base_url, n_links=250): 
-
-    # for key in label_dict:
-    #     for value in label_dict[key]:
+def yt_links(key, value, base_url, n_links=250, save_dir="csv_files"): 
 
     webdriver_path = "/usr/local/bin/geckodriver"
     options = Options()
@@ -52,13 +49,20 @@ def yt_links(key, value, base_url, n_links=250):
         # print(len(set(links)))
         # print(links)
     driver.close()
+
+    print(f"{key}: {value} ==> {len(list(set(links)))} links")
     
     for link in list(set(links)):
         if "shorts" in link:
             continue
         else:
-            with open(f"{key}_{value}.csv", "a", newline="", encoding="utf-8") as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow([link, f"{key},{value}"])
+            if not os.path.exists(save_dir):
+                os.mkdir(save_dir)
 
-    return list(set(links))
+                with open(os.path.join(save_dir, f"{key}_{value}.csv"), "a", newline="", encoding="utf-8") as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow([link, f"{key},{value}"])
+            else:
+                with open(os.path.join(save_dir, f"{key}_{value}.csv"), "a", newline="", encoding="utf-8") as csvfile:
+                    writer = csv.writer(csvfile)
+                    writer.writerow([link, f"{key},{value}"])
