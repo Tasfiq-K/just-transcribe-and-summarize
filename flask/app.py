@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request
 import requests
+from flask import Flask, render_template, request
+
 
 app = Flask(__name__)
 
 @app.route("/", methods=['GET', 'POST'])
-def index():
+def home():
     input_text = ""
     
 
@@ -24,9 +25,9 @@ def index():
         task_text = ", ".join(tasks)
 
         print(task_text)
-        return render_template("index.html", input_text=input_text, output_text=task_text)
+        return render_template("home.html", input_text=input_text, output_text=task_text)
     else:
-        return render_template("index.html")
+        return render_template("home.html")
 
 def predict_tasks(input_text):
     response = requests.post("https://g0blas-paper-task-suggestion.hf.space/run/predict",
