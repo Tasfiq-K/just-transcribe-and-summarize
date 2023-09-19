@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:300,400,400i,500');
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 16px;
+    background: #fafafa;
+    margin-bottom: 60px;
+  }
+
+#heading {
+    font-size: 22px;
+    font-weight: 500px;
+    margin-top: 10px;
+    margin-bottom: 2px;
+}
+
+#description {
+    margin-top: 2px;
+    margin-bottom: 20px;
+    text-align: justify;
+    font-size: 16px;
+}
+
+#form-control div{
+    font-size: 14px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+
+.container-main {
+    padding-bottom: 60px; /* Adjust the value to control the size of the gap */
+}
+
+/* callouts */
+
+.callout {
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ffffff;
+    border-left-width: 5px;
+    border-radius: 5px;
+  }
+  
+.callout-warning {
+    border-left-color: #f34b59;
+    background: #fadfe3;
+  }
+  
+.callout-info {
+    border-left-color: #5bdebb;
+    background: #c8fcec;
+  }
+
+.navbar-bottom {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+
+/* footer */
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #f8f9fa; /* Set the desired background color */
+    /* border-top: 0px solid #dee2e6; Optional border at the top */
+    padding: 5px 5px;
+    margin: 5px 0;
+}
+
+.list-unstyled li {
+    margin-right: 10px; /* Adjust the value to control the space */
+}
+
+
+/* video section */
+#vid {
+    margin-top: 10px;
+
+  }
+
+#transcription_info {
+    /* for the box element */
+    width: 640px; 
+    height: 280px;
+    margin-top: 5px;
+    border: 1px solid #ccc; /* Add a border for a sunken effect */
+    padding: 10px; /* Add some padding for space inside the area */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+    position: relative;
+    
+    /* for the text */
+    overflow: auto;
+    font-size: 13px;
+    font-weight: 200px;
+    text-align: justify;
+}
+
+.heading_info {
+    /* position: -webkit-sticky; */
+    position: sticky;
+    /* top: 0; */
+    /* background-color: #fff; */
+    /* margin: 0; */
+    padding: 5px;
+    font-size: 18px;
+    text-align: center;
+    /* z-index: 1; */
+}
+
+#summary {
+    width: 700px;
+    height: 150px;
+    margin-top: 10px;
+    border: 1px solid #ccc; /* Add a border for a sunken effect */
+    padding: 10px; /* Add some padding for space inside the area */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+    position: relative;
+    
+    /* for the text */
+    overflow: auto;
+    font-size: 13px;
+    font-weight: 200px;
+    text-align: justify;
+}
+
+#short_text {
+    width: 700px;
+    height: 100px;
+    margin-top: 8px;
+    border: 1px solid #ccc; /* Add a border for a sunken effect */
+    padding: 10px; /* Add some padding for space inside the area */
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
+    position: relative;
+    
+    /* for the text */
+    overflow: auto;
+    font-size: 13px;
+    font-weight: 200px;
+    text-align: justify;
+}
