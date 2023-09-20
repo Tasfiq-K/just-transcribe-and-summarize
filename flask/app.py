@@ -24,6 +24,7 @@ def home():
         print(input_text)
 
         if input_link:
+            vid_id = input_link.split("=")[-1]
             transcription = audio_to_text(url=input_link, file_path=save_loc)
             summary = summarizer(transcription)
             keywords = keyword_extractor(transcription)
@@ -34,7 +35,8 @@ def home():
             tags_text = ", ".join(tags)
 
             print(tags_text)
-            return render_template("results.html", input_text=input_text, output_text=tags_text)
+            return render_template("results.html", vid_id=vid_id, transcription=transcription,
+                                   summary=summary, keywords=keywords, tags_text=tags_text)
 
         if media_file:
             # check and save the media file
@@ -59,13 +61,14 @@ def home():
                 tags_text = ""
                 tags_text = ", ".join(tags)
                 
-            return render_template("results.html", input_text=input_text, output_text=tags_text)
+            return render_template("results.html", media=fn, trascription=transcription,
+                                   summary=summary, keywords=keywords, tags_text=tags_text)
 
             
             # else:
         
         if input_text:
-            transcription = input_text
+            # transcription = input_text
             summary = summarizer(transcription)
             keywords = keyword_extractor(transcription)
             classifications = predict_tags(transcription)[0]
@@ -74,7 +77,8 @@ def home():
             tags_text = ""
             tags_text = ", ".join(tags)
 
-        return render_template("resutls.html", input_text=input_text, output_text=tags_text)
+        return render_template("resutls.html", input_text=input_text, summary=summary, 
+                               keywords=keywords, tags_text=tags_text)
 
     return render_template("home.html")
 
