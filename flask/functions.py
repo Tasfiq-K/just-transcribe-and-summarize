@@ -17,7 +17,7 @@ def predict_tags(input_text):
         input_text: [str] Text data
     returns: tags with their probability score
     """
-    response = requests.post("https://g0blas-blog_tags_classifier.hf.space/run/predict", json={"data": [input_text] }).json()
+    response = requests.post("https://g0blas-blog-tags-classifier.hf.space/run/predict", json={"data": [input_text] }).json()
     data = response["data"]
 
     return data
@@ -30,11 +30,11 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
     returns: transcribed text from video 
 
     """
-
+    print(f"{file_path}")
+    print(url)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     bs = 16
-    compute_type = "float16"
-    model = whisperx.load_model("large-v2", device, compute_type=compute_type)
+
 
     if url:
 
@@ -43,6 +43,8 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
 
         # if GPU available run this block
         if device == 'cuda':
+            compute_type = "float16"
+            model = whisperx.load_model("large-v2", device, compute_type=compute_type)
             try:
                 yt.streams.filter(only_audio=True)
                 stream = yt.streams.get_by_itag(139)
@@ -60,12 +62,18 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
 
         else:   # else run this block
 
+            compute_type = "int8"
+            model = whisperx.load_model("large-v2", device, compute_type=compute_type)
+
             try:
                 yt.streams.filter(only_audio=True)
                 stream = yt.streams.get_by_itag(139)
-                stream.download(os.path.join(file_path, f_name))
-                audio = whisperx.load_audio(os.path.join(file_path, f_name))
-                result = model.transcribe(audio, language='en')
+                print("dowload strat")
+                stream.download(file_path, f_name)
+                print(f"saved to {file_path}/{f_name}")
+                print(f"{file_path}, {f_name}")
+                # audio = whisperx.load_audio(f"{file_path}/{f_name}")
+                result = model.transcribe(f"{file_path}/{f_name}", language='en')
                 res = [ i['text'] for i in result['segments'] ]
                 # os.remove(f"static/{f_name}")
 
@@ -79,12 +87,16 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
     elif audio_file:
         # so, It's already in the audio format
         if device == 'cuda':
+            compute_type = "float16"
+            model = whisperx.load_model("large-v2", device, compute_type=compute_type)
             audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
             result = model.transcribe(audio, batch_size=bs, language='en')
             res = [ i['text'] for i in result['segments'] ]
             # os.remove(os.path.join())
             return res[0]
 
+        compute_type = "int8"
+        model = whisperx.load_model("large-v2", device, compute_type=compute_type)
         audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
         result = model.transcribe(audio, language='en')
         res = [ i['text'] for i in result['segments'] ]

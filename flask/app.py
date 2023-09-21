@@ -14,14 +14,14 @@ app = Flask(__name__)
 def home():
 
     input_text = ""
-    save_loc = "static"
+    save_loc = "flask/static"
 
 
     if request.method == 'POST':
         input_text = request.form.get('input_text', '')
         input_link = request.form.get('input_link', '')
         media_file = request.files['input_media']
-        print(input_text)
+        # print(input_text)
 
         if input_link:
             vid_id = input_link.split("=")[-1]
@@ -69,15 +69,18 @@ def home():
         
         if input_text:
             # transcription = input_text
-            summary = summarizer(transcription)
-            keywords = keyword_extractor(transcription)
-            classifications = predict_tags(transcription)[0]
+            summary = summarizer(input_text)
+            keywords = keyword_extractor(input_text)
+            classifications = predict_tags(input_text)[0]
             confidence_list = classifications['confidences']
-            tags = [ conf['label'] for conf in confidence_list if conf['confidence'] >= 0.3]
+            tags = [ conf['label'] for conf in confidence_list] # if conf['confidence'] >= 0.3]
+            print(f"classifications: {classifications}")
+            print(f"tags: {tags}")
+            
             tags_text = ""
-            tags_text = ", ".join(tags)
+            tags_text = ", ".join(tags[:5])
 
-        return render_template("resutls.html", input_text=input_text, summary=summary, 
+        return render_template("results.html", input_text=input_text, summary=summary,
                                keywords=keywords, tags_text=tags_text)
 
     return render_template("home.html")
