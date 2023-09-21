@@ -6,6 +6,46 @@
 
 <!-- do something here -->
 
+<div class="container container-main">
+    <div class="row">
+        <div class="col-md-6">
+            
+            <div id="transcription_info_v2" class="border p-3">
+                
+                <h3 class="heading_info"> <strong> Transcription </strong> </h3>
+               
+                <!-- Add your text here -->
+
+                <p> {{ input_text }}  </p>
+
+            </div>
+
+            <div id="summary_v2" class="border p-3">
+                
+                <h3 class="heading_info"> <strong> Summary </strong> </h3>
+                <p> {{ summary }} </p>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-6">
+
+            <div id="short_text" class="border p-3">
+                <h3 class="heading_info"> <strong> Types </strong> </h3>
+                <p> <strong> {{ tags_text }} </strong>  </p>
+            </div>
+
+
+            <div id="short_text" class="border p-3">
+                <h3 class="heading_info"> <strong> Topics To Lookout For </strong> </h3>
+                <p> <strong> {{ keywords }} </strong> </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- else do this -->
 
 {% else %}
