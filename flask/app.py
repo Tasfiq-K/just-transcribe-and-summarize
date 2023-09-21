@@ -1,10 +1,11 @@
 import os
 import requests
-from functions import predict_tags, audio_to_text, summarizer, keyword_extractor, media_to_audio
+from functions import predict_tags, audio_to_text, summarizer, keyword_extractor, media_to_audio, process_transcription
 from flask import Flask, render_template, request
-
+from flask_executor import Executor
 
 app = Flask(__name__)
+executor = Executor(app)
 
 # UPLOAD_FOLDER = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'static/')
 # app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -24,15 +25,17 @@ def home():
         # print(input_text)
 
         if input_link:
-            vid_id = input_link.split("=")[-1]
-            transcription = audio_to_text(url=input_link, file_path=save_loc)
-            summary = summarizer(transcription)
-            keywords = keyword_extractor(transcription)
-            classifications = predict_tags(transcription)[0]
-            confidence_list = classifications['confidences']
-            tags = [conf['label'] for conf in confidence_list if conf['confidence'] >= 0.3]
-            tags_text = ""
-            tags_text = ", ".join(tags)
+            # vid_id = input_link.split("=")[-1]
+            # transcription = audio_to_text(url=input_link, file_path=save_loc)
+            # summary = summarizer(transcription)
+            # keywords = keyword_extractor(transcription)
+            # classifications = predict_tags(transcription)[0]
+            # confidence_list = classifications['confidences']
+            # tags = [conf['label'] for conf in confidence_list if conf['confidence'] >= 0.3]
+            # tags_text = ""
+            # tags_text = ", ".join(tags)
+            future = executor.submit(process_transcription, input_link, save_loc)
+            vid_id, transcription, summary, keywords, tags_text = future.result()
 
             print(tags_text)
             return render_template("results.html", vid_id=vid_id, transcription=transcription,

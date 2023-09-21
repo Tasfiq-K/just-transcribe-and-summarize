@@ -35,7 +35,6 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
     device = "cuda" if torch.cuda.is_available() else "cpu"
     bs = 16
 
-
     if url:
 
         f_name = 'audio_file.mp4' # the file name to save with
@@ -48,9 +47,10 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
             try:
                 yt.streams.filter(only_audio=True)
                 stream = yt.streams.get_by_itag(139)
-                stream.download(os.path.join(file_path, f_name))
+                stream.download(file_path, f_name)
                 audio = whisperx.load_audio(os.path.join(file_path, f_name))
                 result = model.transcribe(audio, batch_size=bs, language='en')
+
                 res = [ i['text'] for i in result['segments'] ]
                 # os.remove(f"static/{f_name}")
 
@@ -60,7 +60,7 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
                 res = ""
                 return res
 
-        else:   # else run this block
+        else:   # else (cpu) run this block
 
             compute_type = "int8"
             model = whisperx.load_model("large-v2", device, compute_type=compute_type)
@@ -72,10 +72,14 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
                 stream.download(file_path, f_name)
                 print(f"saved to {file_path}/{f_name}")
                 print(f"{file_path}, {f_name}")
-                # audio = whisperx.load_audio(f"{file_path}/{f_name}")
-                result = model.transcribe(f"{file_path}/{f_name}", language='en')
+                audio = whisperx.load_audio(f"{file_path}/{f_name}")
+                print("audio loaded")
+                result = model.transcribe(audio, language='en')
+                print("finishied transcribing")
                 res = [ i['text'] for i in result['segments'] ]
                 # os.remove(f"static/{f_name}")
+
+                print("returnin results")
 
                 return res[0]
 
@@ -160,3 +164,131 @@ def media_to_audio(media_file, file_path, output_ext="mp4", output_file="audio")
         clip.audio.write_audiofile(os.path.join(file_path, output_fn))
 
     return output_fn
+
+
+# def query(filename):
+
+#     API_TOKEN = "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"
+#     API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v2"
+#     headers = {"Authorization": f"Bearer {API_TOKEN}"}
+    
+#     with open(filename, "rb") as f:
+#         data = f.read()
+#     response = requests.post(API_URL, headers=headers, data=data)
+#     return response.json()['text']
+
+
+def process_transcription(url, file_path):
+
+    """
+    flask-executor for subprocessing
+    """
+    vid_id = url.split("=")[-1]
+    transcription =  audio_to_text_v2(url=url, file_path=file_path)
+    summary = summarizer(transcription)
+    keywords = keyword_extractor(transcription)
+    classifications = predict_tags(transcription)[0]
+    confidence_list = classifications['confidences']
+    tags = [conf['label'] for conf in confidence_list] # if conf['confidence'] >= 0.3]
+    tags_text = ", ".join(tags[:5])
+
+    return vid_id, transcription, summary, keywords, tags_text
+
+
+def audio_to_text_v2(url=None, audio_file=None, file_path=None):
+    """
+    Args:
+        link: [str] -> takes a youtube video link
+    returns: transcribed text from video 
+
+    """
+    print(f"{file_path}")
+    print(url)
+    # device = "cuda" if torch.cuda.is_available() else "cpu"
+    # bs = 16
+
+    API_TOKEN = "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"
+    API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v2"
+    headers = {"Authorization": f"Bearer {API_TOKEN}"}
+
+
+    if url:
+
+        f_name = 'audio_file.mp4' # the file name to save with
+        yt = YouTube(url)
+
+        # if GPU available run this block
+        # if device == 'cuda':
+        # compute_type = "float16"
+        # model = whisperx.load_model("large-v2", device, compute_type=compute_type)
+        try:
+            yt.streams.filter(only_audio=True)
+            stream = yt.streams.get_by_itag(139)
+            stream.download(file_path, f_name)
+            # audio = whisperx.load_audio(os.path.join(file_path, f_name))
+            # result = model.transcribe(audio, batch_size=bs, language='en')
+
+            with open(f"{file_path}/{f_name}", "rb") as f:
+                data = f.read()
+                response = requests.post(API_URL, headers=headers, data=data)
+                res = response.json()['text']
+            # res = [ i['text'] for i in result['segments'] ]
+            # os.remove(f"static/{f_name}")
+
+            return res
+
+        except AgeRestrictedError:
+            res = ""
+            return res
+
+    # else:   # else run this block
+
+    #     compute_type = "int8"
+    #     model = whisperx.load_model("large-v2", device, compute_type=compute_type)
+
+    #     try:
+    #         yt.streams.filter(only_audio=True)
+    #         stream = yt.streams.get_by_itag(139)
+    #         print("dowload strat")
+    #         stream.download(file_path, f_name)
+    #         print(f"saved to {file_path}/{f_name}")
+    #         print(f"{file_path}, {f_name}")
+    #         audio = whisperx.load_audio(f"{file_path}/{f_name}")
+    #         print("audio loaded")
+    #         result = model.transcribe(audio, language='en')
+    #         print("finishied transcribing")
+    #         res = [ i['text'] for i in result['segments'] ]
+    #         # os.remove(f"static/{f_name}")
+
+    #         print("returnin results")
+
+    #         return res[0]
+
+    #     except AgeRestrictedError:
+
+    #         res = ""
+    #         return res
+
+    elif audio_file:
+        # so, It's already in the audio format
+        # if device == 'cuda':
+        #     compute_type = "float16"
+        #     model = whisperx.load_model("large-v2", device, compute_type=compute_type)
+        #     audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
+        #     result = model.transcribe(audio, batch_size=bs, language='en')
+        #     res = [ i['text'] for i in result['segments'] ]
+        #     # os.remove(os.path.join())
+        #     return res[0]
+
+        # compute_type = "int8"
+        # model = whisperx.load_model("large-v2", device, compute_type=compute_type)
+        # audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
+        # result = model.transcribe(audio, language='en')
+        # res = [ i['text'] for i in result['segments'] ]
+
+        with open(f"{file_path}/{audio_file}", "rb") as f:
+            data = f.read()
+            response = requests.post(API_URL, headers=headers, data=data)
+            res = response.json()['text']
+
+    return res
