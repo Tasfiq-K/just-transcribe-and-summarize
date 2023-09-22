@@ -2,7 +2,7 @@ import os
 import requests
 # from flask import Flask, render_template, request
 import torch
-import whisperx
+# import whisperx
 from transformers import pipeline
 from pytube import YouTube
 from pytube.exceptions import AgeRestrictedError
