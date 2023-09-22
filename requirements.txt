@@ -1,5 +1,6 @@
 Flask==2.3.3
 Flask_Executor==1.0.0
+gunicorn==21.2.0
 keybert==0.7.0
 moviepy==1.0.3
 pytube==15.0.0
