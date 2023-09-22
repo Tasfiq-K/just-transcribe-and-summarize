@@ -1,0 +1,9 @@
+Flask==2.3.3
+Flask_Executor==1.0.0
+keybert==0.7.0
+moviepy==1.0.3
+pytube==15.0.0
+Requests==2.31.0
+torch==2.0.1
+transformers==4.33.2
+whisperx==3.1.1
