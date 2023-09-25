@@ -53,10 +53,10 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
                 # audio = whisperx.load_audio(os.path.join(file_path, f_name))
                 result, _ = model.transcribe(f"{file_path}/{f_name}", language='en')
 
-                res, _ = [ i.text for i in result ]
+                res = "".join([ i.text for i in result ])
                 # os.remove(f"static/{f_name}")
 
-                return res[0]
+                return res
 
             except AgeRestrictedError:
                 res = ""
@@ -78,12 +78,13 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
                 print("audio loaded")
                 result, _ = model.transcribe(f"{file_path}/{f_name}", language='en')
                 print("finishied transcribing")
-                res = [ i.text for i in result ]
+                res = "".join([ i.text for i in result ])
+                # print(res[)
                 # os.remove(f"static/{f_name}")
 
                 print("returnin results")
 
-                return res[0]
+                return res
 
             except AgeRestrictedError:
 
@@ -97,17 +98,17 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
             model = WhisperModel(model_size_or_path=model_size, device=device, compute_type=compute_type)
             # audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
             result, _ = model.transcribe(f"{file_path}/{f_name}", language='en')
-            res = [ i.text for i in result ]
+            res = "".join([ i.text for i in result ])
             # os.remove(os.path.join())
-            return res[0]
+            return res
 
         compute_type = "int8"
         model = WhisperModel(model_size_or_path=model_size, device=device, compute_type=compute_type)
         # audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
-        result = model.transcribe(f"{file_path}/{f_name}", language='en')
-        res = [ i.text for i in result ]
+        result, _ = model.transcribe(f"{file_path}/{f_name}", language='en')
+        res = "".join([ i.text for i in result ])
 
-    return res[0]
+    return res
 
 
 def summarizer(text):
