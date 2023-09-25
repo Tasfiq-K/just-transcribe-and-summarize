@@ -73,7 +73,7 @@ def home():
         
         if input_text:
             # transcription = input_text
-            summary = summarizer_v2(input_text)
+            summary = summarizer(input_text)
             keywords = keyword_extractor(input_text)
             classifications = predict_tags(input_text)[0]
             confidence_list = classifications['confidences']
