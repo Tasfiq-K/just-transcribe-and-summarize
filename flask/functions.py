@@ -3,6 +3,7 @@ import requests
 # from flask import Flask, render_template, request
 import torch
 # import whisperx
+from faster_whisper import WhisperModel
 from transformers import pipeline
 from pytube import YouTube
 from pytube.exceptions import AgeRestrictedError
@@ -34,6 +35,7 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
     print(url)
     device = "cuda" if torch.cuda.is_available() else "cpu"
     bs = 16
+    model_size = 'small'
 
     if url:
 
@@ -43,15 +45,15 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
         # if GPU available run this block
         if device == 'cuda':
             compute_type = "float16"
-            model = whisperx.load_model("large-v2", device, compute_type=compute_type)
+            model = WhisperModel(model_size_or_path=model_size, device=device, compute_type=compute_type)
             try:
                 yt.streams.filter(only_audio=True)
                 stream = yt.streams.get_by_itag(139)
                 stream.download(file_path, f_name)
-                audio = whisperx.load_audio(os.path.join(file_path, f_name))
-                result = model.transcribe(audio, batch_size=bs, language='en')
+                # audio = whisperx.load_audio(os.path.join(file_path, f_name))
+                result, _ = model.transcribe(f"{file_path}/{f_name}", language='en')
 
-                res = [ i['text'] for i in result['segments'] ]
+                res, _ = [ i.text for i in result ]
                 # os.remove(f"static/{f_name}")
 
                 return res[0]
@@ -63,7 +65,7 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
         else:   # else (cpu) run this block
 
             compute_type = "int8"
-            model = whisperx.load_model("large-v2", device, compute_type=compute_type)
+            model = WhisperModel(model_size_or_path=model_size, device=device, compute_type=compute_type)
 
             try:
                 yt.streams.filter(only_audio=True)
@@ -72,11 +74,11 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
                 stream.download(file_path, f_name)
                 print(f"saved to {file_path}/{f_name}")
                 print(f"{file_path}, {f_name}")
-                audio = whisperx.load_audio(f"{file_path}/{f_name}")
+                # audio = whisperx.load_audio(f"{file_path}/{f_name}")
                 print("audio loaded")
-                result = model.transcribe(audio, language='en')
+                result, _ = model.transcribe(f"{file_path}/{f_name}", language='en')
                 print("finishied transcribing")
-                res = [ i['text'] for i in result['segments'] ]
+                res = [ i.text for i in result ]
                 # os.remove(f"static/{f_name}")
 
                 print("returnin results")
@@ -92,18 +94,18 @@ def audio_to_text(url=None, audio_file=None, file_path=None):
         # so, It's already in the audio format
         if device == 'cuda':
             compute_type = "float16"
-            model = whisperx.load_model("large-v2", device, compute_type=compute_type)
-            audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
-            result = model.transcribe(audio, batch_size=bs, language='en')
-            res = [ i['text'] for i in result['segments'] ]
+            model = WhisperModel(model_size_or_path=model_size, device=device, compute_type=compute_type)
+            # audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
+            result, _ = model.transcribe(f"{file_path}/{f_name}", language='en')
+            res = [ i.text for i in result ]
             # os.remove(os.path.join())
             return res[0]
 
         compute_type = "int8"
-        model = whisperx.load_model("large-v2", device, compute_type=compute_type)
-        audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
-        result = model.transcribe(audio, language='en')
-        res = [ i['text'] for i in result['segments'] ]
+        model = WhisperModel(model_size_or_path=model_size, device=device, compute_type=compute_type)
+        # audio = whisperx.load_audio(os.path.join(file_path, audio_file)) # load the audio file
+        result = model.transcribe(f"{file_path}/{f_name}", language='en')
+        res = [ i.text for i in result ]
 
     return res[0]
 
@@ -139,7 +141,7 @@ def summarizer_v2(text):
     headers = {"Authorization": "Bearer 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"}
 
     response = requests.post(API_URL, headers=headers, json=text)
-    res = response.json()['text']
+    res = response.json()
 
     return res
 
@@ -191,8 +193,8 @@ def process_transcription(url, file_path):
     flask-executor for subprocessing
     """
     vid_id = url.split("=")[-1]
-    transcription =  audio_to_text_v2(url=url, file_path=file_path)
-    summary = summarizer_v2(transcription)
+    transcription =  audio_to_text(url=url, file_path=file_path)
+    summary = summarizer(transcription)
     keywords = keyword_extractor(transcription)
     classifications = predict_tags(transcription)[0]
     confidence_list = classifications['confidences']
