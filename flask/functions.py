@@ -126,6 +126,24 @@ def summarizer(text):
     return summary[0][ 'summary_text' ]
 
 
+def summarizer_v2(text):
+    """
+    A text summaraizer; version 2
+    args: 
+        text: text data
+    returns: returns the summarized version of the given text
+    """
+
+
+    API_URL = "https://api-inference.huggingface.co/models/pszemraj/led-large-book-summary"
+    headers = {"Authorization": "Bearer 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"}
+
+    response = requests.post(API_URL, headers=headers, json=text)
+    res = response.json()['text']
+
+    return res
+
+
 def keyword_extractor(text):
     """
     Extract keywords from the given text
@@ -166,17 +184,6 @@ def media_to_audio(media_file, file_path, output_ext="mp4", output_file="audio")
     return output_fn
 
 
-# def query(filename):
-
-#     API_TOKEN = "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"
-#     API_URL = "https://api-inference.huggingface.co/models/openai/whisper-large-v2"
-#     headers = {"Authorization": f"Bearer {API_TOKEN}"}
-    
-#     with open(filename, "rb") as f:
-#         data = f.read()
-#     response = requests.post(API_URL, headers=headers, data=data)
-#     return response.json()['text']
-
 
 def process_transcription(url, file_path):
 
@@ -185,7 +192,7 @@ def process_transcription(url, file_path):
     """
     vid_id = url.split("=")[-1]
     transcription =  audio_to_text_v2(url=url, file_path=file_path)
-    summary = summarizer(transcription)
+    summary = summarizer_v2(transcription)
     keywords = keyword_extractor(transcription)
     classifications = predict_tags(transcription)[0]
     confidence_list = classifications['confidences']

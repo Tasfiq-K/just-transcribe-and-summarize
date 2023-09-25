@@ -1,6 +1,6 @@
 import os
 import requests
-from functions import predict_tags, audio_to_text, summarizer, keyword_extractor, media_to_audio, process_transcription
+from functions import predict_tags, audio_to_text, summarizer, keyword_extractor, media_to_audio, process_transcription, summarizer_v2
 from flask import Flask, render_template, request
 from flask_executor import Executor
 
@@ -34,6 +34,7 @@ def home():
             # tags = [conf['label'] for conf in confidence_list if conf['confidence'] >= 0.3]
             # tags_text = ""
             # tags_text = ", ".join(tags)
+
             future = executor.submit(process_transcription, input_link, save_loc)
             vid_id, transcription, summary, keywords, tags_text = future.result()
 
@@ -54,7 +55,7 @@ def home():
                 # convert media to text
                 transcription = audio_to_text(audio_file=media_to_audio(fn, save_loc), file_path=save_loc)
                 
-                summary = summarizer(transcription) # get the summary
+                summary = summarizer_v2(transcription) # get the summary
                 keywords = keyword_extractor(transcription) # get the keywords
                 
                 # classification stuff
@@ -72,7 +73,7 @@ def home():
         
         if input_text:
             # transcription = input_text
-            summary = summarizer(input_text)
+            summary = summarizer_v2(input_text)
             keywords = keyword_extractor(input_text)
             classifications = predict_tags(input_text)[0]
             confidence_list = classifications['confidences']
