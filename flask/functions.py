@@ -9,7 +9,7 @@ from pytube import YouTube
 from pytube.exceptions import AgeRestrictedError
 from keybert import KeyBERT
 from moviepy.editor import VideoFileClip
-
+import gc
 
 def predict_tags(input_text):
     """
@@ -189,14 +189,18 @@ def media_to_audio(media_file, file_path, output_ext="mp4", output_file="audio")
 
 
 def process_transcription(url, file_path):
-
+    
     """
     flask-executor for subprocessing
     """
+
     vid_id = url.split("=")[-1]
     transcription =  audio_to_text(url=url, file_path=file_path)
+    gc.collect()
     summary = summarizer(transcription)
+    gc.collect()
     keywords = keyword_extractor(transcription)
+    gc.collect()
     classifications = predict_tags(transcription)[0]
     confidence_list = classifications['confidences']
     tags = [conf['label'] for conf in confidence_list] # if conf['confidence'] >= 0.3]
