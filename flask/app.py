@@ -92,4 +92,5 @@ def home():
 
 
 if __name__ == "__main__":
+    executor = Executor(app)
     app.run(debug=True)
