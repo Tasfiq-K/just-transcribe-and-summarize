@@ -88,7 +88,7 @@ The output generated submitting this Youtube [video](https://www.youtube.com/wat
 
 # Future Work :calendar:
 
-* Will try to develop a system, so that it can run and show result even at a low memory system.
+* Developing a system, that can run and show result even at a low memory system.
 * Using more data to train the model, and trying different model architecture.
 * Improving the Macro and Micro average score.
 * Implementing own summarizer.
