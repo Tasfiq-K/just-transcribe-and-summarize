@@ -53,7 +53,7 @@ The trained model has a memory of **317MB**. Compressed this model using ONNX qu
 `F1 Score (Macro) = 0.32`
 
 # Demos :rocket:
-## HF spaces :hugging_face:
+## HF spaces 🤗
 A live demo for classifying a blog post or text is at Hugging Face spaces. Check out the live demo [here](https://huggingface.co/spaces/g0blas/blog_tags_classifier?logs=container) <br/>
 
 
