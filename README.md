@@ -29,7 +29,7 @@ Data scraped from youtube only contained the links of the video and the correspo
 
 For training the model `distilroberta-base` from HuggingFace along with `blurr` and `fastai` were used. The traininig part consists two phases. First, training with freezed layers, then with unfreezed layers. Achieved 99% accuracy after training for 5 epochs. Model training notebook can be found in the `notebook` directory.
 
-## Techincal Details
+## Techincal Details :triangular_ruler:
 
 The training was done in Google Colaboratory environment on a T4 GPU with 15 GB VRAM. At training on freezed layers a learning rate of `3.8e-3` was used which was determined by using fastai's `lr_find` function. The training consists of 2 epochs. Later at unfreezed state more 3 epoch were trained using learning rates between `1.5e-04 to 2.5e-6`. 
 
@@ -52,8 +52,8 @@ The trained model has a memory of **317MB**. Compressed this model using ONNX qu
 
 `F1 Score (Macro) = 0.32`
 
-# Demos
-## HF spaces
+# Demos :rocket:
+## HF spaces :hugging_face:
 A live demo for classifying a blog post or text is at Hugging Face spaces. Check out the live demo [here](https://huggingface.co/spaces/g0blas/blog_tags_classifier?logs=container) <br/>
 
 
@@ -86,13 +86,14 @@ The output generated submitting this Youtube [video](https://www.youtube.com/wat
 * The classifier can only classifies 316 types of tags. As the dataset was huge, couldn't afford to use more data than that of used to train the model. 
 * The Micro and Macro average score is still not that high.
 
-# Future Work
+# Future Work :calendar:
 
 * Will try to develop a system, so that it can run and show result even at a low memory system.
 * Using more data to train the model, and trying different model architecture.
 * Improving the Macro and Micro average score.
 * Implementing own summarizer.
 
-# Contributions
+# Contributions :raising_hand:
+I'm open for contribution. If you know how to add more to this project, or to take the project to another level, or you know how to optimize the memory problem, you are more than welcome to contribute. The pull request is always open.
 
 
