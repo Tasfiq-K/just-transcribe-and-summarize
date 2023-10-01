@@ -78,7 +78,7 @@ The output page might look like this. (Depending on what you upload)
 
 The output generated submitting this Youtube [video](https://www.youtube.com/watch?v=yhl7ZasbQW4) to the page.
 
-**Note**: ==The output generated from the localhost. As to produce the output it takes a lot of memory, the web app on onrender can't hold that and goes into a out of memory phase, which crashes the webpage.==
+**Note**: <mark>The output generated from the localhost. As to produce the output it takes a lot of memory, the web app on onrender can't hold that and goes into a out of memory phase, which crashes the webpage.</mark>
 
 # Limitations :warning:
 
