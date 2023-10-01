@@ -48,9 +48,9 @@ The trained model has a memory of **317MB**. Compressed this model using ONNX qu
 
 **F1 Scores**
 
-`F1 Score (Micro) = 42.6` <br/>
+`F1 Score (Micro) = 0.42 ` <br/>
 
-`F1 Score (Macro) = 32.3`
+`F1 Score (Macro) = 0.32`
 
 # Demos
 ## HF spaces
@@ -80,7 +80,7 @@ The output generated submitting this Youtube [video](https://www.youtube.com/wat
 
 **Note**: The output generated from the localhost. As to produce the output it takes a lot of memory, the web app on onrender can't hold that and goes into a out of memory phase, which crashes the webpage.
 
-# Limitations
+# Limitations :warning:
 
 * Currently on onrender, It can not provide the result page, where the output would have been shown, because of the memory limit. As the models take up a lot of memory. probably with much memory or using a GPU would solve that problem.
 * The classifier can only classifies 316 types of tags. As the dataset was huge, couldn't afford to use more data than that of used to train the model. 
@@ -88,6 +88,10 @@ The output generated submitting this Youtube [video](https://www.youtube.com/wat
 
 # Future Work
 
+* Will try to develop a system, so that it can run and show result even at a low memory system.
+* Using more data to train the model, and trying different model architecture.
+* Improving the Macro and Micro average score.
+* Implementing own summarizer.
 
 # Contributions
 
