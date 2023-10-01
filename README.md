@@ -1,3 +1,5 @@
+![Visitors](https://api.visitorbadge.io/api/visitors?path=https%3A%2F%2Fgithub.com%2FTasfiq-K%2Fjust-transcribe-and-summarize&label=Views&labelColor=%2337d67a&countColor=%23697689)
+
 # A Multilabel Text classifier with integrated transcriber and summarizer
 
 <h1 align='center' style=color:#fe5e21;><strong>Just Transcribe and Summaraize</strong></h1>
