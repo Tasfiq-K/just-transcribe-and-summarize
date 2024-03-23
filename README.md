@@ -64,7 +64,7 @@ A live demo for classifying a blog post or text is at Hugging Face spaces. Check
 Used text to produce the result in the demo image can be found [here](https://petewarden.com/2017/12/14/how-many-images-do-you-need-to-train-a-neural-network/)
 
 ## Web Deployment
-Deployed a Flask App on onrender. Check [`deploy`](https://github.com/Tasfiq-K/just-transcribe-and-summarize/tree/deploy) branch. The website is live [here](https://https://transcribe-and-summarize.onrender.com/) </br>
+Deployed a Flask App on onrender. Check [`deploy`](https://github.com/Tasfiq-K/just-transcribe-and-summarize/tree/deploy) branch. The website is live [here](https://transcribe-and-summarize.onrender.com/) </br>
 
 Either a video link, a media file (video/audio) or text can be uploaded. which will output the transcriptions, summary of the transcription text, types of the text and important topics extracted from the text. After filling one of the form, click the submit buttion to submit the form.
 
